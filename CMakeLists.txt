@@ -21,7 +21,7 @@ catkin_package(
 
 include_directories(${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -g -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ectomodule(my_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 	src/module.cpp
