@@ -49,7 +49,7 @@ struct ConvexHull2Table {
 		out->tables.resize(1);
 		object_recognition_msgs::Table& table= out->tables[0];
 
-		table.header= pcl_conversions::fromPCL(cloud->header);
+		out->header= table.header= pcl_conversions::fromPCL(cloud->header);
 
 		// compute pose
 		Eigen::Vector4f centroid;
