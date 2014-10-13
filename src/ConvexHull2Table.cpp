@@ -67,6 +67,7 @@ struct ConvexHull2Table {
 		// make sure the z-dimension points upwards (we look at the desk from above)
 		basis.col(2)*= (center.dot(basis.col(2)) < 0 ? 1 : -1);
 
+		basis.col(2).swap(basis.col(0));
 		table.pose.orientation= convert(Eigen::Quaternionf(basis));
 
 		// describe points relative to pose
