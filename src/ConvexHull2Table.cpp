@@ -3,6 +3,7 @@
 #include <ecto_pcl/ecto_pcl.hpp>
 #include <ecto_pcl/pcl_cell.hpp>
 
+#include <pcl/common/common.h>
 #include <pcl/common/centroid.h>
 
 #include <Eigen/Eigenvalues>
@@ -52,13 +53,14 @@ struct ConvexHull2Table {
 		out->header= table.header= pcl_conversions::fromPCL(cloud->header);
 
 		// compute pose
-		Eigen::Vector4f centroid;
-		pcl::compute3DCentroid(*cloud, centroid);
-		Eigen::Vector3f center(centroid[0], centroid[1], centroid[2]);
+		Eigen::Vector4f minpt, maxpt;
+		pcl::getMinMax3D(*cloud, minpt, maxpt);
+		const Eigen::Vector4f center4f((minpt+maxpt)/2);
+		const Eigen::Vector3f center(center4f[0], center4f[1], center4f[2]);
 		table.pose.position= convert(center);
 
 		Eigen::Matrix3f cov;
-		pcl::computeCovarianceMatrixNormalized(*cloud, centroid, cov);
+		pcl::computeCovarianceMatrixNormalized(*cloud, center4f, cov);
 		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> solver(cov);
 
 		Eigen::Matrix3f basis= solver.eigenvectors();
