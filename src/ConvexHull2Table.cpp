@@ -64,12 +64,20 @@ struct ConvexHull2Table {
 		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> solver(cov);
 
 		Eigen::Matrix3f basis= solver.eigenvectors();
-		// compute third dimension orthogonal to first two eigenvectors
-		basis.col(2)= basis.col(0).cross(basis.col(1));
-		// make sure the z-dimension points upwards (we look at the desk from above)
-		basis.col(2)*= (center.dot(basis.col(2)) < 0 ? 1 : -1);
-
+		// eigen returns the eigenvectors by _increasing_ eigenvalues and we want them the other way around
 		basis.col(2).swap(basis.col(0));
+
+		// basis could be degenerate, so compute third dimension orthogonal to first two eigenvectors
+		basis.col(2)= basis.col(0).cross(basis.col(1));
+
+		// x axis should point away from the camera
+		basis.col(0)*= (center.dot(basis.col(0)) > 0) ? 1 : -1;
+		// z axis should point towards the camera
+		basis.col(2)*= (center.dot(basis.col(2)) < 0) ? 1 : -1;
+
+		// make sure the rotation matrix' determinant is 1 and not -1
+		basis.col(1)*= basis.determinant();
+
 		table.pose.orientation= convert(Eigen::Quaternionf(basis));
 
 		// describe points relative to pose
