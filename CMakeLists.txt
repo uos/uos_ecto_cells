@@ -4,6 +4,7 @@ project(my_ecto_cells)
 find_package(catkin REQUIRED COMPONENTS
 	ecto
 	ecto_ros
+	ecto_pcl
 	pcl_ros
 	tf2_ros)
 
