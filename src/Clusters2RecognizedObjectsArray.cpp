@@ -36,17 +36,20 @@ struct Clusters2RecognizedObjectArray {
 			::pcl::PointIndices::ConstPtr ip= boost::make_shared<const ::pcl::PointIndices>(i);
 			extractor.setIndices(ip);
 
-			::pcl::PointCloud<PointT> cloud;
-			extractor.filter(cloud);
+			::pcl::PointCloud<PointT> cluster;
+			extractor.filter(cluster);
 
 			sensor_msgs::PointCloud2 view;
-			pcl::toROSMsg(cloud, view);
+			pcl::toROSMsg(cluster, view);
 
 			object_recognition_msgs::RecognizedObject obj;
+			obj.header= view.header;
 			obj.point_clouds.reserve(1);
 			obj.point_clouds.push_back(view);
 			out->objects.push_back( obj );
 		}
+
+		out->header= pcl_conversions::fromPCL(cloud->header);
 
 		*output_= out;
 		return ecto::OK;
