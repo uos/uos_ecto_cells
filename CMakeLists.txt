@@ -32,4 +32,4 @@ ectomodule(my_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 
 pubsub_gen_wrap(object_recognition_msgs DESTINATION ${PROJECT_NAME} INSTALL)
 
-link_ecto(my_ecto_cells ${catkin_LIBRARIES})
+link_ecto(my_ecto_cells ${catkin_LIBRARIES} ${PCL_LIBRARIES})
