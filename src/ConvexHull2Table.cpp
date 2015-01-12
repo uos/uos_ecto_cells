@@ -92,5 +92,5 @@ struct ConvexHull2Table {
 	ecto::spore<object_recognition_msgs::TableArray::ConstPtr> output_;
 };
 
-ECTO_CELL(my_ecto_cells, ecto::pcl::PclCell<ConvexHull2Table>, "ConvexHull2Table",
+ECTO_CELL(uos_ecto_cells, ecto::pcl::PclCell<ConvexHull2Table>, "ConvexHull2Table",
           "Take a ConvexHull and build a Table(Array) message out of it.")

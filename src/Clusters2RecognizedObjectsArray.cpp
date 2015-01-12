@@ -59,5 +59,5 @@ struct Clusters2RecognizedObjectArray {
 	ecto::spore<object_recognition_msgs::RecognizedObjectArray::ConstPtr> output_;
 };
 
-ECTO_CELL(my_ecto_cells, ecto::pcl::PclCell<Clusters2RecognizedObjectArray>, "Clusters2RecognizedObjectArray",
+ECTO_CELL(uos_ecto_cells, ecto::pcl::PclCell<Clusters2RecognizedObjectArray>, "Clusters2RecognizedObjectArray",
           "Package a set of clusters into one RecognizedObjectArray.")

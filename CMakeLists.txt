@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(my_ecto_cells)
+project(uos_ecto_cells)
 
 find_package(catkin REQUIRED COMPONENTS
 	ecto
@@ -24,7 +24,7 @@ include_directories(${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-ectomodule(my_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
+ectomodule(uos_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 	src/module.cpp
 	src/CloudReframer.cpp
 	src/ConvexHull2Table.cpp
@@ -32,4 +32,4 @@ ectomodule(my_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 
 pubsub_gen_wrap(object_recognition_msgs DESTINATION ${PROJECT_NAME} INSTALL)
 
-link_ecto(my_ecto_cells ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+link_ecto(uos_ecto_cells ${catkin_LIBRARIES} ${PCL_LIBRARIES})

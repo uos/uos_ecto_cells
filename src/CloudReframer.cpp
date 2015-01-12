@@ -58,5 +58,5 @@ struct CloudReframer {
 	ecto::spore<ecto::pcl::PointCloud> output_;
 };
 
-ECTO_CELL(my_ecto_cells, ecto::pcl::PclCell<CloudReframer>, "CloudReframer",
+ECTO_CELL(uos_ecto_cells, ecto::pcl::PclCell<CloudReframer>, "CloudReframer",
           "Transforms a given PointCloud to a specific ROS frame")

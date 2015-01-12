@@ -1,5 +1,5 @@
 #include <ecto/ecto.hpp>
 
-ECTO_DEFINE_MODULE(my_ecto_cells)
+ECTO_DEFINE_MODULE(uos_ecto_cells)
 {
 }
