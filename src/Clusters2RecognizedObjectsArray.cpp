@@ -3,6 +3,7 @@
 #include <ecto_pcl/ecto_pcl.hpp>
 #include <ecto_pcl/pcl_cell.hpp>
 
+#include <pcl/common/common.h>
 #include <pcl/filters/extract_indices.h>
 
 #include <pcl_conversions/pcl_conversions.h>
@@ -42,15 +43,27 @@ struct Clusters2RecognizedObjectArray {
 			::pcl::PointCloud<PointT> cluster;
 			extractor.filter(cluster);
 
+			if( cluster.size() == 0 )
+				continue;
+
 			sensor_msgs::PointCloud2 view;
 			pcl::toROSMsg(cluster, view);
 
 			object_recognition_msgs::RecognizedObject obj;
-			obj.header= view.header;
+			obj.pose.header= obj.header= view.header;
+
+			geometry_msgs::Pose& p= obj.pose.pose.pose;
+
+			Eigen::Vector4f minpt, maxpt;
+			pcl::getMinMax3D(cluster, minpt, maxpt);
+			p.position.x= (minpt[0]+maxpt[0])/2;
+			p.position.y= (minpt[1]+maxpt[1])/2;
+			p.position.z= (minpt[2]+maxpt[2])/2;
+
+			p.orientation.x= p.orientation.y= p.orientation.z= 0; p.orientation.w= 1;
 
 			obj.type.key= object_key;
 			obj.type.db= database_type;
-
 			obj.point_clouds.reserve(1);
 			obj.point_clouds.push_back(view);
 
