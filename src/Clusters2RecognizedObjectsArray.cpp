@@ -29,6 +29,9 @@ struct Clusters2RecognizedObjectArray {
 		object_recognition_msgs::RecognizedObjectArray::Ptr out= boost::make_shared<object_recognition_msgs::RecognizedObjectArray>();
 		out->objects.reserve( indices_->size() );
 
+		std::string object_key("PointCloud");
+		std::string database_type("{\"type\": \"empty\"}");
+
 		::pcl::ExtractIndices<PointT> extractor;
 		extractor.setInputCloud(cloud);
 
@@ -44,8 +47,13 @@ struct Clusters2RecognizedObjectArray {
 
 			object_recognition_msgs::RecognizedObject obj;
 			obj.header= view.header;
+
+			obj.type.key= object_key;
+			obj.type.db= database_type;
+
 			obj.point_clouds.reserve(1);
 			obj.point_clouds.push_back(view);
+
 			out->objects.push_back( obj );
 		}
 
