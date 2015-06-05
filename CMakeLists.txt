@@ -28,7 +28,10 @@ ectomodule(uos_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 	src/module.cpp
 	src/CloudReframer.cpp
 	src/ConvexHull2Table.cpp
-	src/Clusters2RecognizedObjectsArray.cpp)
+	src/Clusters2RecognizedObjectsArray.cpp
+	src/ExtractLargestClusterIndices.cpp
+	src/ConvexHull.cpp
+)
 
 pubsub_gen_wrap(object_recognition_msgs DESTINATION ${PROJECT_NAME} INSTALL)
 
