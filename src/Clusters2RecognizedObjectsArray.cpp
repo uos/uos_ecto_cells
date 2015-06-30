@@ -15,7 +15,9 @@
 #include <object_recognition_msgs/RecognizedObjectArray.h>
 
 struct Clusters2RecognizedObjectArray {
-	static void declare_params(tendrils& p){}
+	static void declare_params(tendrils& p){
+		p.declare<bool>(&Clusters2RecognizedObjectArray::keep_organized_, "keep_organized", "Should the extracted clouds remain organized?", false);
+	}
 
 	static void declare_io(const tendrils& p, tendrils& input, tendrils& output){
 		input.declare(&Clusters2RecognizedObjectArray::indices_, "indices", "List of cluster indices.");
@@ -35,6 +37,7 @@ struct Clusters2RecognizedObjectArray {
 
 		::pcl::ExtractIndices<PointT> extractor;
 		extractor.setInputCloud(cloud);
+		extractor.setKeepOrganized(*keep_organized_);
 
 		for(const ::pcl::PointIndices& i : *indices_){
 			::pcl::PointIndices::ConstPtr ip= boost::make_shared<const ::pcl::PointIndices>(i);
@@ -76,6 +79,7 @@ struct Clusters2RecognizedObjectArray {
 		return ecto::OK;
 	}
 
+	ecto::spore<bool> keep_organized_;
 	ecto::spore<std::vector< ::pcl::PointIndices >> indices_;
 	ecto::spore<object_recognition_msgs::RecognizedObjectArray::ConstPtr> output_;
 };
