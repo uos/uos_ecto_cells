@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
 	pcl_ros
 	tf2_ros)
 
-find_package(PCL REQUIRED)
+find_package(PCL "1.8" REQUIRED)
 
 catkin_python_setup()
 
