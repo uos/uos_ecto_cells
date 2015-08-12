@@ -31,6 +31,7 @@ ectomodule(uos_ecto_cells DESTINATION ${PROJECT_NAME} INSTALL
 	src/Clusters2RecognizedObjectsArray.cpp
 	src/ExtractLargestClusterIndices.cpp
 	src/ConvexHull.cpp
+	src/ProjectPlaneInliersPerspectively.cpp
 )
 
 pubsub_gen_wrap(object_recognition_msgs DESTINATION ${PROJECT_NAME} INSTALL)
