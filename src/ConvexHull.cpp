@@ -42,6 +42,7 @@ struct ConvexHull
 
   static void declare_io(const tendrils& params, tendrils& inputs, tendrils& outputs)
   {
+    inputs.declare(&ConvexHull::indices_, "indices", "Indices of points of interest in input.");
     outputs.declare(&ConvexHull::output_, "output", "Points that form the the convex hull.");
     outputs.declare(&ConvexHull::output_indices_, "output_indices", "Indices of convex hull points.");
   }
@@ -56,18 +57,23 @@ struct ConvexHull
     typename ::pcl::PointCloud<Point>::Ptr cloud(new typename ::pcl::PointCloud<Point>);
 
     filter.setInputCloud(input);
+    if(indices_.user_supplied())
+      filter.setIndices(*indices_);
     filter.setDimension(*dimensionality_);
     filter.reconstruct(*cloud);
 
-    filter.getHullPointIndices(*output_indices_);
+    auto output_indices= boost::make_shared<::pcl::PointIndices>();
+    filter.getHullPointIndices(*output_indices);
+    *output_indices_= output_indices;
 
     *output_ = ecto::pcl::xyz_cloud_variant_t(cloud);
     return ecto::OK;
   }
 
   ecto::spore<int> dimensionality_;
+  ecto::spore< ::pcl::PointIndices::ConstPtr > indices_;
   ecto::spore<ecto::pcl::PointCloud> output_;
-  ecto::spore<::pcl::PointIndices> output_indices_;
+  ecto::spore< ::pcl::PointIndices::ConstPtr > output_indices_;
 };
 
 ECTO_CELL(uos_ecto_cells, ecto::pcl::PclCell<ConvexHull>,
