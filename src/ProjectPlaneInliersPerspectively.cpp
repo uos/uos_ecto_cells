@@ -14,6 +14,7 @@ struct ProjectPlaneInliersPerspectively {
 	static void declare_params(tendrils& p){}
 
 	static void declare_io(const tendrils& p, tendrils& input, tendrils& output){
+		input.declare(&ProjectPlaneInliersPerspectively::indices_, "indices", "Indices of points of interest in input.");
 		input.declare(&ProjectPlaneInliersPerspectively::model_, "model", "Model of plane.");
 		output.declare(&ProjectPlaneInliersPerspectively::output_, "output", "Projected points.");
 	}
@@ -27,14 +28,20 @@ struct ProjectPlaneInliersPerspectively {
 		Eigen::Vector3f plane_normal= Eigen::Vector3f::Map(&(*model_)->values[0]);
 		Eigen::Hyperplane<float,3> plane(plane_normal, (*model_)->values[3]);
 
-		for( auto& point : projected_points->points ){
-			point.getVector3fMap()= Eigen::ParametrizedLine<float,3>::Through(Eigen::Vector3f::Zero(), point.getVector3fMap()).intersectionPoint(plane);
+		if(!indices_.user_supplied()){
+			for( auto& point : projected_points->points )
+				point.getVector3fMap()= Eigen::ParametrizedLine<float,3>::Through(Eigen::Vector3f::Zero(), point.getVector3fMap()).intersectionPoint(plane);
+		}
+		else {
+			for( const auto& i : (*indices_)->indices )
+				projected_points->points[i].getVector3fMap()= Eigen::ParametrizedLine<float,3>::Through(Eigen::Vector3f::Zero(), projected_points->points[i].getVector3fMap()).intersectionPoint(plane);
 		}
 
 		*output_= ecto::pcl::xyz_cloud_variant_t(projected_points);
 		return ecto::OK;
 	}
 
+	ecto::spore<pcl::PointIndices::ConstPtr> indices_;
 	ecto::spore<pcl::ModelCoefficients::ConstPtr> model_;
 	ecto::spore<ecto::pcl::PointCloud> output_;
 };
